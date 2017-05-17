@@ -49,6 +49,8 @@ for comment in comments:
     for entry in authorsEntry:
         currAuthor = entry[0]
         if currAuthor in text:
+            #check to see if the bot has already replied
+            #comment.
             
             if 'I am a bot ' not in text:
                 currLink = entry[1]
