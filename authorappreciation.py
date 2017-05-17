@@ -1,14 +1,19 @@
 import praw
+import os
+
+c_id=os.environ['AUTHOR_CLIENT_ID']
+c_secret=os.environ['AUTHOR_CLIENT_SECRET']
+pw=os.environ['REDDIT_PASSWORD']
+u=os.environ['REDDIT_USERNAME']
+
+print(u)
 
 bot = praw.Reddit(user_agent='r/Fantasy Author Appreciation Bot',
-                  client_id='MewlbhB1n7oS_Q',
-client_secret='sdGRnpD1pn0fCetprM1rNhGc0Rc',
-password="&dtT>tSA@b.Z@LYm",
-username='RedditFantasyBot')
-#client_id='4tRBVBdNzCv2AQ',
-#client_secret='JD1B7wOtU3q3m0BmClZ_OkT5148',
-#password='hmt2gjt',
-#username='LittlePlasticCastle')
+                  client_id=c_id,
+client_secret=c_secret,
+password=pw,
+username=u)
+
 
 authorsPost = "https://www.reddit.com/r/Fantasy/comments/60g42r/author_appreciation_thread_volunteer_thread/"
 
