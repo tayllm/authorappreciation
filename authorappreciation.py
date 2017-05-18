@@ -3,13 +3,19 @@ import os
 
 is_prod = os.getenv("IS_HEROKU")
 print(is_prod)
-
-#if is_prod:
-c_id=os.environ['AUTHOR_CLIENT_ID']
-c_secret=os.environ['AUTHOR_CLIENT_SECRET']
-pw= os.environ['REDDIT_PASSWORD']
-u= os.environ['REDDIT_USERNAME']
-sub= os.environ['SUBREDDIT']
+dev = os.getenv("IS_TEST")
+if dev is 'TRUE':
+    c_id=os.environ['AUTHOR_CLIENT_ID_TEST']
+    c_secret=os.environ['AUTHOR_CLIENT_SECRET_TEST']
+    pw= os.environ['REDDIT_PASSWORD_TEST']
+    u= os.environ['REDDIT_USERNAME_TEST']
+    sub= os.environ['SUBREDDIT_TEST']
+else:
+    c_id=os.environ['AUTHOR_CLIENT_ID']
+    c_secret=os.environ['AUTHOR_CLIENT_SECRET']
+    pw= os.environ['REDDIT_PASSWORD']
+    u= os.environ['REDDIT_USERNAME']
+    sub= os.environ['SUBREDDIT']
 
 
 if not os.path.isfile("posts_replied_to.txt"):
