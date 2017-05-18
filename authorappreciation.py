@@ -1,10 +1,24 @@
 import praw
 import os
 
-c_id=os.environ['AUTHOR_CLIENT_ID']
-c_secret=os.environ['AUTHOR_CLIENT_SECRET']
-pw=os.environ['REDDIT_PASSWORD']
-u=os.environ['REDDIT_USERNAME']
+is_prod = os.getenv("IS_HEROKU")
+print(is_prod)
+
+if is_prod:
+    c_id=os.environ['AUTHOR_CLIENT_ID']
+    c_secret=os.environ['AUTHOR_CLIENT_SECRET']
+    pw= os.environ['REDDIT_PASSWORD']
+    u= os.environ['REDDIT_USERNAME']
+    sub= os.environ['SUBREDDIT']
+
+
+if not os.path.isfile("posts_replied_to.txt"):
+    posts_replied_to = []
+else:
+    with open("posts_replied_to.txt", "r") as f:
+       posts_replied_to = f.read()
+       posts_replied_to = posts_replied_to.split("\n")
+       posts_replied_to = list(filter(None, posts_replied_to))
 
 print(u)
 
@@ -15,13 +29,14 @@ password=pw,
 username=u)
 
 
-authorsPost = "https://www.reddit.com/r/Fantasy/comments/60g42r/author_appreciation_thread_volunteer_thread/"
+authorsWiki = "https://www.reddit.com/r/Fantasy/wiki/authorappreciation"
 
 authorsList = []
 authorsEntry = []
 #generate the list of author names
-submission = bot.submission(url=authorsPost)
-lines = submission.selftext.splitlines()
+submission = bot.subreddit('fantasy').wiki['authorappreciation'].content_md #bot.submission(url=authorsWiki)
+lines = submission.splitlines()
+
 
 for line in lines:
     if "|" in line:
@@ -30,43 +45,62 @@ for line in lines:
         author = entry[1].strip()
         if (author.startswith("[")):
             linkStart = author.index("(") + 1
-            linkEnd = len(author) 
-            link = author[linkStart:linkEnd]
+            linkEnd = author.index(")")  #len(author) - 1
+            link = author[linkStart:linkEnd].strip()
             #link = link.replace(")", "")
             authorEnd = author.index(']') 
-            author = author[1:authorEnd]
+            author = author[1:authorEnd].strip()
             valid = [author, link, member]
             print(line)
             print(valid)
             authorsList.append(author)
             authorsEntry.append(valid)
             
-        
+#only execute if it is limited to a subreddit        
+if (sub):
+    subreddit = bot.subreddit(sub)
+    #subreddit = bot.subreddit('fantasymods')
 
-subreddit = bot.subreddit('grumpkinNsnark')
-#subreddit = bot.subreddit('fantasymods')
+    comments = subreddit.stream.comments()
 
-comments = subreddit.stream.comments()
+    for comment in comments:
+        if comment.id not in posts_replied_to:
+            text = comment.body #Fetch body
+            author = comment.author #Fetch author
+            includeAuthors = ""
+            for entry in authorsEntry:
+                currAuthor = entry[0]
 
-for comment in comments:
-    text = comment.body #Fetch body
-    author = comment.author #Fetch author
-    for entry in authorsEntry:
-        currAuthor = entry[0]
-        if currAuthor in text:
-            #check to see if the bot has already replied
-            #comment.
-            
-            if 'I am a bot ' not in text:
-                currLink = entry[1]
-                currMember = entry[2]
-                print(entry)
-                
-                message = "Check out r/Fantasy Author Appreciation post for [" + currAuthor + "](" + currLink + ") from user u/" +  currMember 
-                message = message + "\n\n---\n\n ^(I am a bot bleep! bloop! Contact my ~~master~~ creator /u/LittlePlasticCastle with any questions or comments.)"
+                if currAuthor in text:
+                    #check to see if the bot has already replied
+                    #comment.
                     
+                    if 'I am a bot ' not in text:
+                        currLink = entry[1].strip()
+                        currMember = entry[2]
+                        print(entry)
+                        #includeAuthors = includeAuthors + "* [Author Appreciation post for **" + currAuthor + "**](" + currLink + ") from user u /" +  currMember + " \n"
+                        #find the subject for the original post
+                        aaPost = bot.submission(url=currLink)
+                        title = aaPost.title
+                        if currAuthor in title:
+                            title = title.replace(currAuthor, "**" + currAuthor + "**")
+                        else:
+                            title = "**" + currAuthor + "**: " + title
+                        includeAuthors = includeAuthors + "* [" + title + "](" + currLink + ") from user u /" +  currMember + " \n"
+            if (includeAuthors):       
+                message = "r/Fantasy's [Author Appreciation series](" + authorsWiki + ") has posts for an author you mentioned  \n\n"
+                message = message + includeAuthors
+                message = message + "\n\n---\n\n ^(I am a bot bleep! bloop! Contact my ~~master~~ creator /u/LittlePlasticCastle with any questions or comments.)"
+                            
                 comment.reply(message)
+                posts_replied_to.append(comment.id)
+                with open("posts_replied_to.txt", "a") as f:
+                    f.write(comment.id + "\n")
                 print(message)
-  #if ('test' in text.lower()):
-   #     message = "A reply to u/{0}".format(author)
-#        comment.reply(message)
+
+
+
+        #if ('test' in text.lower()):
+        #     message = "A reply to u/{0}".format(author)
+        #        comment.reply(message)
