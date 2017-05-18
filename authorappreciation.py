@@ -4,7 +4,7 @@ import os
 is_prod = os.getenv("IS_HEROKU")
 print(is_prod)
 dev = os.getenv("IS_TEST")
-if dev is 'TRUE':
+if dev == 'TRUE':
     c_id=os.environ['AUTHOR_CLIENT_ID_TEST']
     c_secret=os.environ['AUTHOR_CLIENT_SECRET_TEST']
     pw= os.environ['REDDIT_PASSWORD_TEST']
