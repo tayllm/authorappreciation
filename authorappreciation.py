@@ -1,5 +1,24 @@
 import praw
 import os
+import psycopg2
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://heroku_8pzzctpn:hnnu9ch1h6j867d2eiq613bbnl@ds149201.mlab.com:49201/heroku_8pzzctpn')
+
+db = client.get_default_database()
+
+#urlparse.uses_netloc.append("postgres")
+#url = urlparse.urlparse(os.environ["DATABASE_URL"])
+
+#conn = psycopg2.connect(
+#    database=url.path[1:],
+#    user=url.username,
+#    password=url.password,
+#    host=url.hostname,
+#    port=url.port
+#)
+
+# mongodb://heroku_8pzzctpn:hnnu9ch1h6j867d2eiq613bbnl@ds149201.mlab.com:49201/heroku_8pzzctpn
 
 is_prod = os.getenv("IS_HEROKU")
 print(is_prod)
@@ -68,10 +87,14 @@ if (sub):
     #subreddit = bot.subreddit('fantasymods')
 
     #comments = subreddit.stream.comments()
-    comments = subreddit.comments(limit=250):
+    comments = subreddit.comments(limit=250)
 
     for comment in comments:
-        if comment.id not in posts_replied_to:
+        replied = db['replied']
+
+        new_reply = {'replied':comment.id}
+        if not db.author_appreciation.find_one(new_reply):
+       # if comment.id not in posts_replied_to:
             text = comment.body #Fetch body
             author = comment.author #Fetch author
             includeAuthors = ""
@@ -101,12 +124,13 @@ if (sub):
                 message = message + "\n\n---\n\n ^(I am a bot bleep! bloop! Contact my ~~master~~ creator /u/LittlePlasticCastle with any questions or comments.)"
                             
                 comment.reply(message)
-                posts_replied_to.append(comment.id)
-                with open("posts_replied_to.txt", "a") as f:
-                    f.write(comment.id + "\n")
+                result = db.author_appreciation.insert_one(new_reply)
+                #posts_replied_to.append(comment.id)
+                #with open("posts_replied_to.txt", "a") as f:
+                #    f.write(comment.id + "\n")
                 print(message)
 
-
+client.close()
 
         #if ('test' in text.lower()):
         #     message = "A reply to u/{0}".format(author)
