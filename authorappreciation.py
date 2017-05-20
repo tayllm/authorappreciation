@@ -67,7 +67,8 @@ if (sub):
     subreddit = bot.subreddit(sub)
     #subreddit = bot.subreddit('fantasymods')
 
-    comments = subreddit.stream.comments()
+    #comments = subreddit.stream.comments()
+    comments = subreddit.comments(limit=250):
 
     for comment in comments:
         if comment.id not in posts_replied_to:
