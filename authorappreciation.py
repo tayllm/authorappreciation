@@ -36,6 +36,7 @@ else:
     u= os.environ['REDDIT_USERNAME']
     sub= os.environ['SUBREDDIT']
 
+print(sub)
 
 if not os.path.isfile("posts_replied_to.txt"):
     posts_replied_to = []
