@@ -62,6 +62,7 @@ authorsEntry = []
 submission = bot.subreddit('fantasy').wiki['authorappreciation'].content_md #bot.submission(url=authorsWiki)
 lines = submission.splitlines()
 
+numReplies=0
 
 for line in lines:
     if "|" in line:
@@ -117,20 +118,23 @@ if (sub):
                             title = title.replace(currAuthor, "**" + currAuthor + "**")
                         else:
                             title = "**" + currAuthor + "**: " + title
-                        includeAuthors = includeAuthors + "* [" + title + "](" + currLink + ") from user u /" +  currMember + " \n"
+                        includeAuthors = includeAuthors + "* [" + title + "](" + currLink + ") from user u/" +  currMember + " \n"
             if (includeAuthors):       
                 message = "r/Fantasy's [Author Appreciation series](" + authorsWiki + ") has posts for an author you mentioned  \n\n"
                 message = message + includeAuthors
                 message = message + "\n\n---\n\n ^(I am a bot bleep! bloop! Contact my ~~master~~ creator /u/LittlePlasticCastle with any questions or comments.)"
-                            
-                comment.reply(message)
-                result = db.author_appreciation.insert_one(new_reply)
+
+                #Make the reply and add id to the db to avoid duplicate replies            
+                #comment.reply(message)
+                #result = db.author_appreciation.insert_one(new_reply)
+                numReplies = numReplies + 1
                 #posts_replied_to.append(comment.id)
                 #with open("posts_replied_to.txt", "a") as f:
                 #    f.write(comment.id + "\n")
                 print(message)
 
 client.close()
+print numReplies
 
         #if ('test' in text.lower()):
         #     message = "A reply to u/{0}".format(author)
