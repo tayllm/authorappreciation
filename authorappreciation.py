@@ -78,8 +78,8 @@ for line in lines:
             authorEnd = author.index(']') 
             author = author[1:authorEnd].strip()
             valid = [author, link, member]
-            print(line)
-            print(valid)
+            #print(line)
+            #print(valid)
             authorsList.append(author)
             authorsEntry.append(valid)
             
@@ -126,8 +126,8 @@ if (sub):
                 message = message + "\n\n---\n\n ^(I am a bot bleep! bloop! Contact my ~~master~~ creator /u/LittlePlasticCastle with any questions or comments.)"
 
                 #Make the reply and add id to the db to avoid duplicate replies            
-                #comment.reply(message)
-                #result = db.author_appreciation.insert_one(new_reply)
+                comment.reply(message)
+                result = db.author_appreciation.insert_one(new_reply)
                 numReplies = numReplies + 1
                 #posts_replied_to.append(comment.id)
                 #with open("posts_replied_to.txt", "a") as f:
