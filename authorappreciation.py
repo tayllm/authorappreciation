@@ -102,6 +102,8 @@ if (sub):
             includeAuthors = ""
             for entry in authorsEntry:
                 currAuthor = entry[0]
+                if currAuthor == "Avi":
+                    currAuthor = " Avi "
 
                 if currAuthor in text:
                     #check to see if the bot has already replied
@@ -135,7 +137,7 @@ if (sub):
                 print(message)
 
 client.close()
-print numReplies
+print (numReplies)
 
         #if ('test' in text.lower()):
         #     message = "A reply to u/{0}".format(author)
