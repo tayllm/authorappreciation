@@ -2,6 +2,7 @@ import praw
 import os
 import urllib
 import psycopg2
+import pymongo
 from pymongo import MongoClient
 
 #client = MongoClient('mongodb://heroku_8pzzctpn:hnnu9ch1h6j867d2eiq613bbnl@ds149201.mlab.com:49201/heroku_8pzzctpn?retryWrites=false')
