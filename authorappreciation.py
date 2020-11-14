@@ -1,13 +1,13 @@
 import praw
 import os
+import urllib
 import psycopg2
 from pymongo import MongoClient
 
 #client = MongoClient('mongodb://heroku_8pzzctpn:hnnu9ch1h6j867d2eiq613bbnl@ds149201.mlab.com:49201/heroku_8pzzctpn?retryWrites=false')
-client = MongoClient('mongodb+srv://heroku_8pzzctpn:k@DZdbdSWd3BYCs@cluster-8pzzctpn.0a7uv.mongodb.net/heroku_8pzzctpn?retryWrites=true&w=majority')
-db = client.get_default_database()
-
-
+mongo_uri = "mongodb+srv://heroku_8pzzctpn:" + urllib.quote("k@DZdbdSWd3BYCs") + "@cluster-8pzzctpn.0a7uv.mongodb.net/heroku_8pzzctpn?retryWrites=true&w=majority"
+client = pymongo.MongoClient(mongo_uri)
+#client = MongoClient('mongodb+srv://heroku_8pzzctpn:k@DZdbdSWd3BYCs@cluster-8pzzctpn.0a7uv.mongodb.net/heroku_8pzzctpn?retryWrites=true&w=majority')
 db = client.get_default_database()
 
 #urlparse.uses_netloc.append("postgres")
