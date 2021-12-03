@@ -110,8 +110,10 @@ if (sub):
             #Check for Opt Out Comment
             if text == '!optout' :
                 parentcomment = bot.comment(comment.parent_id)
-                if parentcomment.author.name == 'RedditFantasyBot':
+        
+                if parentcomment.author == 'RedditFantasyBot':
                     bot.subreddit('fantasymods').wiki['opt-out'].edit(content=modWiki + "\n" + author)
+                    result = db.author_appreciation.insert_one(new_reply)
 
             if '!noauthorbot' not in text:
                 if author not in optoutList:
