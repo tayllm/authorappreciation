@@ -107,9 +107,9 @@ if (sub):
             author = comment.author #Fetch author
 
             #Check for Opt Out Comment
-            if text is '!optout' :
+            if text === '!optout' :
                 parentcomment = subreddit.comment(comment.parent_id)
-                if parentcomment.author.name is 'RedditFantasyBot':
+                if parentcomment.author.name === 'RedditFantasyBot':
                     bot.subreddit('fantasymods').wiki['opt-out'].edit(content=modWiki + "\n" + author)
 
             if '!noauthorbot' not in text:
