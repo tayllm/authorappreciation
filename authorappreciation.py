@@ -109,7 +109,7 @@ if (sub):
             
             #Check for Opt Out Comment
             if text == '!optout' :
-                parentcomment = subreddit.comment(comment.parent_id)
+                parentcomment = bot.comment(comment.parent_id)
                 if parentcomment.author.name == 'RedditFantasyBot':
                     bot.subreddit('fantasymods').wiki['opt-out'].edit(content=modWiki + "\n" + author)
 
