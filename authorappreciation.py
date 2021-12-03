@@ -59,6 +59,9 @@ username=u)
 
 
 authorsWiki = "https://www.reddit.com/r/Fantasy/wiki/authorappreciation"
+optoutWiki = "https://www.reddit.com/r/FantasyMods/wiki/opt-out"
+modWiki = bot.subreddit('fantasymods').wiki['opt-out'].content_md
+optoutList = modWiki.splitlines()
 
 authorsList = []
 authorsEntry = []
@@ -102,42 +105,51 @@ if (sub):
        # if comment.id not in posts_replied_to:
             text = comment.body #Fetch body
             author = comment.author #Fetch author
-            includeAuthors = ""
-            for entry in authorsEntry:
-                currAuthor = entry[0]
-                if currAuthor == "Avi":
-                    currAuthor = " Avi "
 
-                if currAuthor in text:
-                    #check to see if the bot has already replied
-                    #comment.
-                    
-                    if 'I am a bot ' not in text:
-                        currLink = entry[1].strip()
-                        currMember = entry[2]
-                        print(entry)
-                        #includeAuthors = includeAuthors + "* [Author Appreciation post for **" + currAuthor + "**](" + currLink + ") from user u /" +  currMember + " \n"
-                        #find the subject for the original post
-                        aaPost = bot.submission(url=currLink)
-                        title = aaPost.title
-                        if currAuthor in title:
-                            title = title.replace(currAuthor, "**" + currAuthor + "**")
-                        else:
-                            title = "**" + currAuthor + "**: " + title
-                        includeAuthors = includeAuthors + "* [" + title + "](" + currLink + ") from user u/" +  currMember + " \n"
-            if (includeAuthors):       
-                message = "r/Fantasy's [Author Appreciation series](" + authorsWiki + ") has posts for an author you mentioned  \n\n"
-                message = message + includeAuthors
-                message = message + "\n\n---\n\n ^(I am a bot bleep! bloop! Contact my ~~master~~ creator /u/LittlePlasticCastle with any questions or comments.)"
+            #Check for Opt Out Comment
+            if text is '!optout' :
+                parentcomment = subreddit.comment(comment.parent_id)
+                if parentcomment.author.name is 'RedditFantasyBot':
+                    bot.subreddit('fantasymods').wiki['opt-out'].edit(content=modWiki + "\n" + author)
 
-                #Make the reply and add id to the db to avoid duplicate replies            
-                comment.reply(message)
-                result = db.author_appreciation.insert_one(new_reply)
-                numReplies = numReplies + 1
-                #posts_replied_to.append(comment.id)
-                #with open("posts_replied_to.txt", "a") as f:
-                #    f.write(comment.id + "\n")
-                print(message)
+            if '!noauthorbot' not in text:
+                if author not in optoutList:
+                    includeAuthors = ""
+                    for entry in authorsEntry:
+                        currAuthor = entry[0]
+                        if currAuthor == "Avi":
+                            currAuthor = " Avi "
+
+                        if currAuthor in text:
+                            #check to see if the bot has already replied
+                            #comment.
+                            
+                            if 'I am a bot ' not in text:
+                                currLink = entry[1].strip()
+                                currMember = entry[2]
+                                print(entry)
+                                #includeAuthors = includeAuthors + "* [Author Appreciation post for **" + currAuthor + "**](" + currLink + ") from user u /" +  currMember + " \n"
+                                #find the subject for the original post
+                                aaPost = bot.submission(url=currLink)
+                                title = aaPost.title
+                                if currAuthor in title:
+                                    title = title.replace(currAuthor, "**" + currAuthor + "**")
+                                else:
+                                    title = "**" + currAuthor + "**: " + title
+                                includeAuthors = includeAuthors + "* [" + title + "](" + currLink + ") from user u/" +  currMember + " \n"
+                    if (includeAuthors):       
+                        message = "r/Fantasy's [Author Appreciation series](" + authorsWiki + ") has posts for an author you mentioned  \n\n"
+                        message = message + includeAuthors
+                        message = message + "\n\n---\n\n ^(I am a bot bleep! bloop! Contact my ~~master~~ creator /u/LittlePlasticCastle with any questions or comments.)"
+
+                        #Make the reply and add id to the db to avoid duplicate replies            
+                        comment.reply(message)
+                        result = db.author_appreciation.insert_one(new_reply)
+                        numReplies = numReplies + 1
+                        #posts_replied_to.append(comment.id)
+                        #with open("posts_replied_to.txt", "a") as f:
+                        #    f.write(comment.id + "\n")
+                        print(message)
 
 client.close()
 print (numReplies)
