@@ -112,7 +112,7 @@ if (sub):
                 parentcomment = bot.comment(comment.parent_id)
                 
                 if parentcomment.author == 'RedditFantasyBot':
-                    bot.subreddit('fantasymods').wiki['opt-out'].edit(content=modWiki + "\n" + parentcomment.author.name)
+                    bot.subreddit('fantasymods').wiki['opt-out'].edit(content=modWiki + "\n" + author.name)
                     result = db.author_appreciation.insert_one(new_reply)
 
             if '!noauthorbot' not in text:
