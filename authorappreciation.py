@@ -144,7 +144,9 @@ if (sub):
                     if (includeAuthors):       
                         message = "r/Fantasy's [Author Appreciation series](" + authorsWiki + ") has posts for an author you mentioned  \n\n"
                         message = message + includeAuthors
-                        message = message + "\n\n---\n\n ^(I am a bot bleep! bloop! Contact my ~~master~~ creator /u/LittlePlasticCastle with any questions or comments.)"
+                        message = message + "\n\n---\n\n ^(I am a bot bleep! bloop! Contact my ~~master~~ creator /u/LittlePlasticCastle with any questions or comments."
+                                          + "\n\nTo prevent a reply for a single post, include the text '!noauthorbot'. " 
+                                          + " To opt out of the bot for all your future posts, reply with '!optout'.)"
 
                         #Make the reply and add id to the db to avoid duplicate replies            
                         comment.reply(message)
