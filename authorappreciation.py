@@ -114,7 +114,8 @@ if (sub):
             text = comment.body #Fetch body
             author = comment.author #Fetch author
 
-
+            print(text)
+            print("----------------------------------------------------------")
             #Check for Opt Out Comment
             if text == '!optout' :
                 parentcomment = bot.comment(comment.parent_id)
