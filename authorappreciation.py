@@ -96,7 +96,8 @@ if (sub):
 
     #comments = subreddit.stream.comments()
     comments = subreddit.comments(limit=250)
-    print("Number of new comments: " + sum(1 for x in comments))
+    print("Number of new comments: " )
+    print(sum(1 for x in comments))
     processed = list()
     for comment in comments:
         # There seem to be duplicate responses from the bot occassionaly, within seconds, so posted
