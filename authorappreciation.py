@@ -92,15 +92,10 @@ for line in lines:
 #only execute if it is limited to a subreddit        
 if (sub):
     subreddit = bot.subreddit(sub)
-    #subreddit = bot.subreddit('fantasymods')
-
     #comments = subreddit.stream.comments()
     comments = subreddit.comments(limit=250)
-#     print("Number of new comments: " )
-#     print(sum(1 for x in comments))
     processed = list()
     for comment in comments:
-        #print(comment.id)
         # There seem to be duplicate responses from the bot occassionaly, within seconds, so posted
         # with the same run of authorappreciationbot.
         # Make sure to handle if duplicate comment ids are returned from praw
@@ -110,13 +105,12 @@ if (sub):
             replied = db['replied']
 
             new_reply = {'replied':comment.id}
+            
+            # Check if the bot has already replied to this comment
             if not db.author_appreciation.find_one(new_reply):
-            # if comment.id not in posts_replied_to:
                 text = comment.body #Fetch body
                 author = comment.author #Fetch author
 
-                #print(text)
-                #print("----------------------------------------------------------")
                 #Check for Opt Out Comment
                 if text == '!optout' :
                     parentcomment = bot.comment(comment.parent_id)
@@ -125,7 +119,9 @@ if (sub):
                         bot.subreddit('fantasymods').wiki['opt-out'].edit(content=modWiki + "\n" + author.name)
                         result = db.author_appreciation.insert_one(new_reply)
 
+                # Check if this comment is opting out of the bot
                 if '!noauthorbot' not in text:
+                    # Verify the author of the comment has not opted out of all bot replies
                     if author not in optoutList:
 
                         includeAuthors = ""
@@ -135,9 +131,7 @@ if (sub):
                                 currAuthor = " Avi "
 
                             if currAuthor in text:
-                                #check to see if the bot has already replied
-                                #comment.
-
+                                # Make sure this is not a bot comment
                                 if 'I am a bot ' not in text:
                                     currLink = entry[1].strip()
                                     currMember = entry[2]
