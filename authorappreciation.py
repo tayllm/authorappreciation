@@ -24,7 +24,7 @@ db = client.get_default_database()
 # mongodb://heroku_8pzzctpn:hnnu9ch1h6j867d2eiq613bbnl@ds149201.mlab.com:49201/heroku_8pzzctpn
 
 is_prod = os.getenv("IS_HEROKU")
-print(is_prod)
+#print(is_prod)
 dev = os.getenv("IS_TEST")
 if dev == 'TRUE':
     c_id=os.environ['AUTHOR_CLIENT_ID_TEST']
@@ -96,6 +96,7 @@ if (sub):
 
     #comments = subreddit.stream.comments()
     comments = subreddit.comments(limit=250)
+    print("Number of new comments: " + len(comments))
     processed = list()
     for comment in comments:
         # There seem to be duplicate responses from the bot occassionaly, within seconds, so posted
@@ -163,7 +164,7 @@ if (sub):
                             print(message)
         
 client.close()
-print (numReplies)
+print ("Number of comment replies: " + numReplies)
 
         #if ('test' in text.lower()):
         #     message = "A reply to u/{0}".format(author)
