@@ -165,7 +165,8 @@ if (sub):
                             print(message)
         
 client.close()
-print ("Number of comment replies: " + numReplies)
+print ("Number of comment replies: ")
+print(numReplies)
 
         #if ('test' in text.lower()):
         #     message = "A reply to u/{0}".format(author)
