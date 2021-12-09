@@ -100,6 +100,7 @@ if (sub):
     print(sum(1 for x in comments))
     #processed = list()
     for comment in comments:
+        print(comment.id)
         # # There seem to be duplicate responses from the bot occassionaly, within seconds, so posted
         # # with the same run of authorappreciationbot.
         # # Make sure to handle if duplicate comment ids are returned from praw
