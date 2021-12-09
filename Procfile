@@ -1,1 +1,1 @@
-web: gunicorn authorappreciation --log-file -
+web: gunicorn authorappreciationtest --log-file -
