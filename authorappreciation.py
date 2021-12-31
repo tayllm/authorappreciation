@@ -112,7 +112,7 @@ if (sub):
                 author = comment.author #Fetch author
 
                 #Check for Opt Out Comment
-                if text == '!optout' :
+                if text.lower() == '!optout' :
                     parentcomment = bot.comment(comment.parent_id)
 
                     if parentcomment.author == 'RedditFantasyBot':
